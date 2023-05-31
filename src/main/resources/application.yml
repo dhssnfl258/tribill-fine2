@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://ec2-43-200-174-246.ap-northeast-2.compute.amazonaws.com:3306/tribill?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 1234
+    password: zx12zx12
   jpa:
     hibernate:
       ddl-auto: create
