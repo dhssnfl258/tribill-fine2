@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ec2-43-200-174-246.ap-northeast-2.compute.amazonaws.com:3306/tribill?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 114516552012-aahafsuem5gdq5ucdrbmoo1n71nd0obi.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+
+          kakao:
+            client-id: 59432f5079303fe2825ea04466aa6233
+            client-secret: X64hSPCieDB1VNer7ZhUiyI39M5Q7uDz
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, profile_image
+            client-name: Kakao
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+  profiles:
+    active: jwt
+
+cloud:
+  aws:
+    s3:
+      bucket: tribillbucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAWSDJ74GU7EMSBQVN
+      secretKey: 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
