@@ -157,7 +157,7 @@ public class BgController {
 
     }
 
-    @PostMapping("api/budget/trip/{tripId}/register")
+    @PostMapping("/api/budget/trip/{tripId}/register")
     public ResponseEntity<?> BudgetRegister(@PathVariable Long tripId, MultipartFile multiPartFile,  RequestBudgetRegisterDto requestBudgetRegisterDto){
             try{
                 Budget budget = new Budget();
