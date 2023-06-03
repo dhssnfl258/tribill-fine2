@@ -193,7 +193,7 @@ public ResponseEntity<?> createTravel(Authentication authentication, @RequestBod
      */
     // UserId 어떻게 할것인가.
     @GetMapping("/user/TravelList")
-    public List<ResponseTravelListDto> showTravel(Authentication authentication){
+    public ResponseEntity<?> showTravel(Authentication authentication){
         log.info("this is user info {}", authentication.getName());
 //        ResponseEntity.ok(service.authenticate(request));
         String email = authentication.getName();
@@ -207,6 +207,7 @@ public ResponseEntity<?> createTravel(Authentication authentication, @RequestBod
             log.info("{}", t);
             for (Travel travel : t) {
                 ResponseTravelListDto responseTravelListDto = new ResponseTravelListDto();
+                responseTravelListDto.setId(travel.getId());
                 responseTravelListDto.setTitle(travel.getTitle());
                 responseTravelListDto.setStartDate(travel.getStartDate().toString());
                 responseTravelListDto.setEndDate(travel.getEndDate().toString());
@@ -216,7 +217,7 @@ public ResponseEntity<?> createTravel(Authentication authentication, @RequestBod
                 travelList.add(responseTravelListDto);
             }
         }
-        return travelList;
+        return ResponseEntity.ok(travelList);
     }
 
     /**
@@ -235,10 +236,5 @@ public ResponseEntity<?> createTravel(Authentication authentication, @RequestBod
         log.info("여행 삭제 완료 : {} ",tripId);
         return ResponseEntity.ok(tripId);
     }
-
-//    @GetMapping("/test")
-//    public void test(){
-//        System.out.println("this is test!");
-//    }
 
 }

@@ -1,12 +1,64 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<a href="/oauth2/authorization/kakao">Kakao Login</a><br>-->
+<!--<a href="/oauth2/authorization/google">Google Login</a><br>-->
+<!--<img src="https://tribillbucket.s3.ap-northeast-2.amazonaws.com/01824161-9a79-4b66-bd9c-b9f0c1a78bd3-%E1%84%89%E1%85%B3%E1%84%91%E1%85%B3%E1%84%85%E1%85%B5%E1%86%BC%E1%84%85%E1%85%B3%E1%84%90%E1%85%A1%E1%86%AB%E1%84%8B%E1%85%B5.png">-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<a href="/oauth2/authorization/kakao">Kakao Login</a><br>
-<a href="/oauth2/authorization/google">Google Login</a><br>
+<a href="ec2-54-180-86-234.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/kakao">Kakao Login</a><br>
+<a href="http://ec2-54-180-86-234.ap-northeast-2.compute.amazonaws.com:8001/oauth2/authorization/google">Google Login</a><br>
 <img src="https://tribillbucket.s3.ap-northeast-2.amazonaws.com/01824161-9a79-4b66-bd9c-b9f0c1a78bd3-%E1%84%89%E1%85%B3%E1%84%91%E1%85%B3%E1%84%85%E1%85%B5%E1%86%BC%E1%84%85%E1%85%B3%E1%84%90%E1%85%A1%E1%86%AB%E1%84%8B%E1%85%B5.png">
+
+<script>
+    const handleGoogleLogin = async () => {
+        try {
+            const response = await axios.get('http://ec2-54-180-86-234.ap-northeast-2.compute.amazonaws.com:8001/oauth2/authorization/google');
+            const redirectUrl = response.request.responseURL;
+
+            // 리디렉션 URL에서 토큰 값을 추출하는 로직을 추가합니다.
+            const token = extractTokenFromUrl(redirectUrl);
+
+            // 토큰을 async 스토리지에 저장합니다.
+            saveTokenToAsyncStorage(token);
+
+            // 토큰 값을 alert로 보여줍니다.
+            alert(`Token: ${token}`);
+
+        } catch (error) {
+            console.error('Failed to handle Google login:', error);
+        }
+    };
+
+    const extractTokenFromUrl = (url) => {
+        const match = url.match(/access_token=([^&]+)/);
+        if (match) {
+            return match[1];
+        } else {
+            return null;
+        }
+    };
+
+    const saveTokenToAsyncStorage = (token) => {
+        // async 스토리지에 토큰을 저장하는 로직을 작성합니다.
+        // 예를 들어, localStorage를 사용하여 저장할 수 있습니다.
+        localStorage.setItem('token', token);
+    };
+
+    document.querySelector('a[href="/oauth2/authorization/google"]').addEventListener('click', handleGoogleLogin);
+</script>
 </body>
 </html>

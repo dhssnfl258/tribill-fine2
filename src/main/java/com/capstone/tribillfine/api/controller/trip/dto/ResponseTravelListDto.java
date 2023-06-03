@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ResponseTravelListDto {
+    private Long id;
     private String title;
     private String startDate;
     private String endDate;

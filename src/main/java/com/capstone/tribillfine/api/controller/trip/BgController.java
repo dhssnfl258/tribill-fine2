@@ -1,6 +1,7 @@
 package com.capstone.tribillfine.api.controller.trip;
 
 
+import com.capstone.tribillfine.api.controller.trip.dto.ResponseTravelDetailDto;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.RequestBudgetRegisterDto;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.ResponseBgRegister;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.ResponseBudgetDetailsDto;
@@ -66,18 +67,26 @@ public class BgController {
     @GetMapping("api/budget/trip/{tripId}/details")
     public ResponseEntity<?> travelDetails(@PathVariable Long tripId, @RequestParam("userName") String userName){
         log.info("{}, {}",tripId, userName);
+        ResponseTravelDetailDto travelDetailDto = new ResponseTravelDetailDto();
 
         Travel travel = travelRepository.findById(tripId).get();
+
+        travelDetailDto.setStartDate(travel.getStartDate().toString());
+        travelDetailDto.setEndDate(travel.getEndDate().toString());
         log.info("travel::{}",travel.getTitle());
         User user = userRepository.findByName(userName).get();
         log.info("user::{}",user.getName());
 
         List<Budget> allByTravelAndUsers = budgetRepository.findAllByTravelAndUsers(travel, user);
 
+        travelDetailDto.setBudgetList( allByTravelAndUsers);
+
         for (Budget allByTravelAndUser : allByTravelAndUsers) {
             log.info("{}",allByTravelAndUser.getTitle());
         }
+
         List<User> users = travel.getUsers();
+        travelDetailDto.setUserList(users);
         for (User user1 : users) {
             log.info("users::{}",user1);
         }

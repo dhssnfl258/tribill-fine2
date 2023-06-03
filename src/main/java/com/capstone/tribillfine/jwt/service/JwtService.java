@@ -3,6 +3,8 @@ package com.capstone.tribillfine.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.capstone.tribillfine.domain.user.Tk;
+import com.capstone.tribillfine.domain.user.TkRepository;
 import com.capstone.tribillfine.domain.user.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,7 @@ public class JwtService {
     private static final String BEARER = "Bearer ";
 
     private final UserRepository userRepository;
-
+    private final TkRepository tkRepository;
     /**
      * AccessToken 생성 메소드
      */
@@ -94,6 +96,10 @@ public class JwtService {
 
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
+        tkRepository.save(accessToken);
+        for (String s : tkRepository.findAll()) {
+            System.out.println("tk::" + s);
+        }
         log.info("Access Token, Refresh Token 헤더 설정 완료");
         log.info(accessToken);
     }
@@ -145,6 +151,8 @@ public class JwtService {
      * AccessToken 헤더 설정
      */
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
+
+
         response.setHeader(accessHeader, accessToken);
     }
 

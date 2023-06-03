@@ -68,6 +68,7 @@ public class SecurityConfig {
                 .antMatchers("/sign-up").permitAll() // 회원가입 접근 가능
                 .antMatchers("/sign").permitAll() // 회원가입 접근 가능
                 .antMatchers("/api/**").permitAll() // 테스트용입니다.
+                .antMatchers("/login/oauth2/code/**").permitAll() // 테스트용입니다.
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
                 //== 소셜 로그인 설정 ==//
