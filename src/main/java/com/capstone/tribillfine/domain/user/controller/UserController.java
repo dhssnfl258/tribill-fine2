@@ -64,12 +64,26 @@ public class UserController {
             token = s;
         }
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body("Token sent successfully");
+    }
+    @GetMapping("/login/oauth2/code/oauth2/tok")
+//receive token from google
+    public ResponseEntity<String> getTok() {
+        List<String> all = tkRepository.findAll();
+        String token = "";
+        for (String s : all) {
+            token = s;
+        }
+
         tkRepository.deleteAll();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + token);
 
-        return ResponseEntity.ok().headers(headers).body("Token sent successfully");
+        return ResponseEntity.ok(token);
     }
 
 
