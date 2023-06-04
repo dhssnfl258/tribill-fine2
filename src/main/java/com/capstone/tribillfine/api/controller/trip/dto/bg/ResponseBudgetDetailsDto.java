@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 public class ResponseBudgetDetailsDto {
+    private Long id;
     //타이틀
     private String title;
     //한화

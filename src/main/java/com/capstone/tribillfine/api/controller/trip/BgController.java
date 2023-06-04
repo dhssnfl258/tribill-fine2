@@ -91,7 +91,7 @@ public class BgController {
             log.info("users::{}",user1);
         }
 
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(travelDetailDto);
     }
 
 
@@ -247,7 +247,9 @@ public class BgController {
         Type type = budget.getType();
         Long id = budget.getId();
 
+
         ResponseBudgetDetailsDto budgetDetailsDto = new ResponseBudgetDetailsDto();
+        budgetDetailsDto.setId(id);
         budgetDetailsDto.setTitle(title);
         budgetDetailsDto.setNation(nation);
         budgetDetailsDto.setNationMoney(nationMoney);

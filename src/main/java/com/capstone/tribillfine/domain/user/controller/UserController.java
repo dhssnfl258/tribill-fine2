@@ -55,20 +55,21 @@ public class UserController {
 
 
 
-    @GetMapping("/login/oauth2/code/oauth2/sign-up")
-//receive token from google
-    public ResponseEntity<String> googleLogin() {
-        List<String> all = tkRepository.findAll();
-        String token = "";
-        for (String s : all) {
-            token = s;
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-
-        return ResponseEntity.ok().headers(headers).body("Token sent successfully");
-    }
+//    @GetMapping("/login/oauth2/code/oauth2/sign-up")
+////receive token from google
+//    public String googleLogin() {
+//        List<String> all = tkRepository.findAll();
+//        String token = "";
+//        for (String s : all) {
+//            token = s;
+//        }
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + token);
+//
+////        return ResponseEntity.ok().headers(headers).body("Token sent successfully");
+//        return "success";
+//    }
     @GetMapping("/login/oauth2/code/oauth2/tok")
 //receive token from google
     public ResponseEntity<String> getTok() {

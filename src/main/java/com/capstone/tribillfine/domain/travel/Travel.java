@@ -24,6 +24,7 @@ public class Travel {
     private Double amount;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String inviteCode;
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
