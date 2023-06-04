@@ -78,7 +78,9 @@ public class BgController {
         log.info("user::{}",user.getName());
 
         List<Budget> allByTravelAndUsers = budgetRepository.findAllByTravelAndUsers(travel, user);
-
+        for (Budget allByTravelAndUser : allByTravelAndUsers) {
+            System.out.println("budget::"+allByTravelAndUser.getKoreaMoney());
+        }
         travelDetailDto.setBudgetList( allByTravelAndUsers);
 
         for (Budget allByTravelAndUser : allByTravelAndUsers) {
@@ -183,12 +185,17 @@ public class BgController {
                 //검증할것
                 List<String> whoPay = requestBudgetRegisterDto.getWhoPay();
                 budget.setWhoPay(whoPay);
+                log.info("whoPay::{}",whoPay);
                 //수정할것
                 List<String> spendWith = requestBudgetRegisterDto.getSpendWith();
                 for (String s : spendWith) {
-                    User user = userRepository.findByName(s).get();
-                    budget.getUsers().add(user);
+                    log.info("spendWith::{}",s);
                 }
+//                for (String s : spendWith) {
+//                    User user = userRepository.findByName(s).get();
+//                    budget.getUsers().add(user);
+//                }
+
                 budget.setSpendWidth(spendWith);
 
 
@@ -204,7 +211,8 @@ public class BgController {
                 budget.setRegisterTime(registerDate);
                 budget.setCategory(category);
                 budget.setType(type);
-
+                //budget 전체 정보 log 찍어보기
+                log.info("budget::{}",budget);
 
                 budgetRepository.save(budget);
                 return ResponseEntity.ok("ok");
