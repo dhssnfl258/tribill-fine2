@@ -27,7 +27,7 @@ public class RequestBudgetRegisterDto {
     private List<String> SpendWith;
     private List<String> WhoPay;
     //이미지
-    private MultipartFile imgFile;
+    private MultipartFile multiPartFile;
     //타입
     private Type type;
     //카테고리

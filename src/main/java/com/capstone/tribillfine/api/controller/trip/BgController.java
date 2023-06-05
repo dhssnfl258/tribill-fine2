@@ -2,9 +2,11 @@ package com.capstone.tribillfine.api.controller.trip;
 
 
 import com.capstone.tribillfine.api.controller.trip.dto.ResponseTravelDetailDto;
+import com.capstone.tribillfine.api.controller.trip.dto.SimplebudgetDto;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.RequestBudgetRegisterDto;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.ResponseBgRegister;
 import com.capstone.tribillfine.api.controller.trip.dto.bg.ResponseBudgetDetailsDto;
+import com.capstone.tribillfine.api.dto.request.BudgetDTO;
 import com.capstone.tribillfine.domain.account.Budget;
 import com.capstone.tribillfine.domain.account.BudgetRepository;
 import com.capstone.tribillfine.domain.account.CATEGORY;
@@ -65,32 +67,32 @@ public class BgController {
      * @return
      */
     @GetMapping("api/budget/trip/{tripId}/details")
-    public ResponseEntity<?> travelDetails(@PathVariable Long tripId, @RequestParam("userName") String userName){
+    public ResponseEntity<ResponseTravelDetailDto> travelDetails(@PathVariable Long tripId, @RequestParam("userName") String userName){
         log.info("{}, {}",tripId, userName);
         ResponseTravelDetailDto travelDetailDto = new ResponseTravelDetailDto();
-
         Travel travel = travelRepository.findById(tripId).get();
-
         travelDetailDto.setStartDate(travel.getStartDate().toString());
         travelDetailDto.setEndDate(travel.getEndDate().toString());
         log.info("travel::{}",travel.getTitle());
-        User user = userRepository.findByName(userName).get();
-        log.info("user::{}",user.getName());
-
-        List<Budget> allByTravelAndUsers = budgetRepository.findAllByTravelAndUsers(travel, user);
-        for (Budget allByTravelAndUser : allByTravelAndUsers) {
-            System.out.println("budget::"+allByTravelAndUser.getKoreaMoney());
+        travelDetailDto.setBudgetList(new ArrayList<>());
+        List<Budget> budgets = budgetRepository.findByTravelAndSpendWidth(travel, userName);
+        for (Budget budget : budgets) {
+            SimplebudgetDto simplebudgetDto = new SimplebudgetDto();
+            simplebudgetDto.setId(budget.getId());
+            simplebudgetDto.setNation(budget.getNation());
+            simplebudgetDto.setNationMoney(budget.getNationMoney());
+            simplebudgetDto.setKmoney(budget.getKoreaMoney());
+            travelDetailDto.getBudgetList().add(simplebudgetDto);
+            log.info("budget::{}",budget);
         }
-        travelDetailDto.setBudgetList( allByTravelAndUsers);
 
-        for (Budget allByTravelAndUser : allByTravelAndUsers) {
-            log.info("{}",allByTravelAndUser.getTitle());
-        }
+//        travelDetailDto.setBudgetList(budgets);
 
         List<User> users = travel.getUsers();
         travelDetailDto.setUserList(users);
+
         for (User user1 : users) {
-            log.info("users::{}",user1);
+            log.info("users::{}",user1.getName());
         }
 
         return ResponseEntity.ok(travelDetailDto);
@@ -147,29 +149,10 @@ public class BgController {
 
 
 
-    @GetMapping("/test")
-    public String hello(){
-        InetAddress local = null;
-        try {
-            local = InetAddress.getLocalHost();
-        }
-        catch ( UnknownHostException e ) {
-            e.printStackTrace();
-        }
 
-        if( local == null ) {
-            return "";
-        }
-        else {
-            String ip = local.getHostAddress();
-            System.out.println(ip);
-            return ip;
-        }
-
-    }
 
     @PostMapping("/api/budget/trip/{tripId}/register")
-    public ResponseEntity<?> BudgetRegister(@PathVariable Long tripId, MultipartFile multiPartFile,  RequestBudgetRegisterDto requestBudgetRegisterDto){
+    public ResponseEntity<?> BudgetRegister(@PathVariable Long tripId,  RequestBudgetRegisterDto requestBudgetRegisterDto){
             try{
                 Budget budget = new Budget();
                 String title = requestBudgetRegisterDto.getTitle();
@@ -201,9 +184,14 @@ public class BgController {
 
                 LocalDate registerDate = LocalDate.parse( requestBudgetRegisterDto.getRegisterDate());
 //                String fileUrl = fileUploadService.uploadFile(requestBudgetRegisterDto.getImgFile());
-                log.info("file name :: {}", multiPartFile.getOriginalFilename());
-                String fileUrl = fileUploadService.upload(multiPartFile);
-                budget.setFileUrl(fileUrl);
+//                log.info("file name :: {}", multiPartFile.getOriginalFilename());
+                Optional<MultipartFile> multiPartFile = Optional.ofNullable(requestBudgetRegisterDto.getMultiPartFile());
+                if(multiPartFile.isPresent()){
+                    String fileUrl = fileUploadService.upload(requestBudgetRegisterDto.getMultiPartFile());
+                    budget.setFileUrl(fileUrl);
+                }else{
+                    log.info("file is empty");
+                }
                 budget.setTitle(title);
                 budget.setNation(nation);
                 budget.setNationMoney(nationMoney);
@@ -226,8 +214,8 @@ public class BgController {
 //        budget.setSpendWidth();
     }
     @DeleteMapping("api/budget/delete")
-    public ResponseEntity<?> deleteBudget(@RequestParam String Name){
-        budgetRepository.delete(budgetRepository.findByTitle(Name));
+    public ResponseEntity<?> deleteBudget(@RequestParam Long id){
+        budgetRepository.delete(budgetRepository.findById(id).get());
         return ResponseEntity.ok("ok");
     }
 
@@ -277,8 +265,8 @@ public class BgController {
 
 
     @PutMapping("/api/budget/{budgetId}/update")
-    public ResponseEntity<?> budgetUpdate(@PathVariable Long budgetId,MultipartFile multiPartFile, RequestBudgetRegisterDto requestBudgetRegisterDto){
-
+    public ResponseEntity<?> budgetUpdate(@PathVariable Long budgetId, RequestBudgetRegisterDto requestBudgetRegisterDto){
+//        MultipartFile multiPartFile,
         try{
             Budget budget = budgetRepository.findById(budgetId).get();
             String title = requestBudgetRegisterDto.getTitle();
@@ -294,16 +282,22 @@ public class BgController {
 
             //수정할것
             List<String> spendWith = requestBudgetRegisterDto.getSpendWith();
-            for (String s : spendWith) {
-                User user = userRepository.findByName(s).get();
-                budget.getUsers().add(user);
-            }
+            budget.setSpendWidth(spendWith);
+//            for (String s : spendWith) {
+//                User user = userRepository.findByName(s).get();
+//                budget.getUsers().add(user);
+//            }
 
 
             LocalDate registerDate = LocalDate.parse(requestBudgetRegisterDto.getRegisterDate());
 //                String fileUrl = fileUploadService.uploadFile(requestBudgetRegisterDto.getImgFile());
-            String fileUrl = fileUploadService.upload(multiPartFile);
-            budget.setFileUrl(fileUrl);
+            Optional<MultipartFile> multiPartFile = Optional.ofNullable(requestBudgetRegisterDto.getMultiPartFile());
+            if(multiPartFile.isPresent()){
+                String fileUrl = fileUploadService.upload(requestBudgetRegisterDto.getMultiPartFile());
+                budget.setFileUrl(fileUrl);
+            }else{
+                log.info("file is empty");
+            }
             budget.setTitle(title);
             budget.setNation(nation);
             budget.setNationMoney(nationMoney);

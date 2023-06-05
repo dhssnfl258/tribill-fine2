@@ -9,6 +9,7 @@ import java.util.List;
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
     List<Budget> findAllByTravel(Travel travel);
     List<Budget> findAllByTravelAndUsers(Travel travel, User user);
+    List<Budget> findByTravelAndSpendWidth(Travel travel, String spendWidth);
 
     Budget findByTitle(String title);
 }
