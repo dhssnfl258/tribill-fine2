@@ -15,6 +15,7 @@ public interface CurrencyRepository extends JpaRepository<Currency, Integer> {
 Currency findByNationAndDate(@Param("nation") String nation, @Param("date") LocalDate date);
 
 Optional<Currency> findTopByNationOrderByDateDesc(String nation);
+//Optional<Currency> findTopByCodeOrderByDateDesc(String code);
 
     @Query("SELECT c FROM Currency c WHERE c.date = :date")
     List<Currency> findCurrenyByDate(@Param("date") LocalDate date);

@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface NationCodeRepository extends JpaRepository<NationCode, Integer> {
 
     Optional<NationCode> findByNation(String nation);
+    Optional<NationCode> findByCode(String code);
 }

@@ -28,11 +28,11 @@ public class CurrencyVisibleController {
     public ResponseEntity<?> getCurrency(@RequestParam String Nation){
         ResponseCurrencyDto responseCurrencyDto = new ResponseCurrencyDto();
 
-        Optional<NationCode> byNation = nationCodeRepository.findByNation(Nation);
-
-        NationCode nationCode = byNation.get();
-        String code = nationCode.getCode();
-        Optional<Currency> topByNationOrderByDateDesc = currencyRepository.findTopByNationOrderByDateDesc(code);
+//        Optional<NationCode> byNation = nationCodeRepository.findByCode(Nation);
+//
+//        NationCode nationCode = byNation.get();
+//        String code = nationCode.getCode();
+        Optional<Currency> topByNationOrderByDateDesc = currencyRepository.findTopByNationOrderByDateDesc(Nation);
         Currency currency = topByNationOrderByDateDesc.get();
         responseCurrencyDto.setNation(currency.getNation());
         responseCurrencyDto.setRate(currency.getRate());
