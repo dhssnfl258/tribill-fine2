@@ -79,6 +79,7 @@ public class BgController {
         for (Budget budget : budgets) {
             SimplebudgetDto simplebudgetDto = new SimplebudgetDto();
             simplebudgetDto.setId(budget.getId());
+            simplebudgetDto.setTitle(budget.getTitle());
             simplebudgetDto.setNation(budget.getNation());
             simplebudgetDto.setNationMoney(budget.getNationMoney());
             simplebudgetDto.setKmoney(budget.getKoreaMoney());
