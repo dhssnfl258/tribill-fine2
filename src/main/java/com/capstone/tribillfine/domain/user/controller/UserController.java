@@ -22,15 +22,18 @@ public class UserController {
     private final JwtService jwtService;
 
     @PostMapping("/sign-up")
-    public String signUp(@RequestBody UserSignUpDto userSignUpDto) throws Exception {
+    public ResponseEntity<TokDto> signUp(@RequestBody UserSignUpDto userSignUpDto) throws Exception {
         userService.signUp(userSignUpDto);
 //        System.out.println(userSignUpDto.getEmail());
+        TokDto tokDto = new TokDto();
+
         String accessToken = jwtService.createAccessToken(userSignUpDto.getEmail());
+        tokDto.setToken(accessToken);
         if(userService.signUp(userSignUpDto).equals("fail")){
-            return "false";
+            return ResponseEntity.ok(tokDto);
 //            return accessToken;
         }
-        return accessToken;
+        return ResponseEntity.ok(tokDto);
     }
     @CrossOrigin(origins = "*")
 

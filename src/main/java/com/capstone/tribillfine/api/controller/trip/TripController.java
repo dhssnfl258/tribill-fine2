@@ -5,6 +5,7 @@ package com.capstone.tribillfine.api.controller.trip;
 import com.capstone.tribillfine.api.controller.trip.dto.RequestTravelCreateDto;
 import com.capstone.tribillfine.api.controller.trip.dto.RequestTravelPutDto;
 import com.capstone.tribillfine.api.controller.trip.dto.ResponseTravelListDto;
+import com.capstone.tribillfine.domain.account.Budget;
 import com.capstone.tribillfine.domain.account.BudgetRepository;
 import com.capstone.tribillfine.domain.currency.NationCode;
 import com.capstone.tribillfine.domain.currency.NationCodeRepository;
@@ -207,10 +208,14 @@ public ResponseEntity<?> createTravel(Authentication authentication, @RequestBod
      */
 
     @DeleteMapping("/user/Travel/{tripId}/delete")
-    public ResponseEntity<?> delTravel(Authentication authentication,
-//                            @RequestBody Travel travel,
+    public ResponseEntity<?> delTravel(
                               @PathVariable Long tripId
     ){
+        Travel travel = travelRepository.findById(tripId).get();
+        List<Budget> allByTravel = budgetRepository.findAllByTravel(travel);
+        for (Budget budget : allByTravel) {
+            budgetRepository.delete(budget);
+        }
         travelRepository.deleteById(tripId);
         log.info("여행 삭제 완료 : {} ",tripId);
         return ResponseEntity.ok(tripId);
