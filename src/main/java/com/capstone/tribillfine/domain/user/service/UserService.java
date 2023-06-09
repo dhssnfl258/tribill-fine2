@@ -17,26 +17,33 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signUp(UserSignUpDto userSignUpDto) throws Exception {
-
+    public String signUp(UserSignUpDto userSignUpDto) throws Exception {
+        int i = 0;
         if (userRepository.findByEmail(userSignUpDto.getEmail()).isPresent()) {
-            throw new Exception("이미 존재하는 이메일입니다.");
+//            throw new Exception("이미 존재하는 이메일입니다.");
+            i = 1;
         }
 
         if (userRepository.findByName(userSignUpDto.getNickname()).isPresent()) {
-            throw new Exception("이미 존재하는 닉네임입니다.");
+//            throw new Exception("이미 존재하는 닉네임입니다.");
+//            return "fail";
+            i = 1;
         }
-
-        User user = User.builder()
-                .email(userSignUpDto.getEmail())
-                .password(userSignUpDto.getPassword())
-                .name(userSignUpDto.getNickname())
+        if(i == 0){
+            System.out.println("sign-up!!");
+            User user = User.builder()
+                    .email(userSignUpDto.getEmail())
+                    .password(userSignUpDto.getPassword())
+                    .name(userSignUpDto.getNickname())
 //                .age(userSignUpDto.getAge())
 //                .city(userSignUpDto.getCity())
-                .role(Role.USER)
-                .build();
+                    .role(Role.USER)
+                    .build();
 
-        user.passwordEncode(passwordEncoder);
-        userRepository.save(user);
+            user.passwordEncode(passwordEncoder);
+            userRepository.save(user);
+        }
+
+        return "success";
     }
 }

@@ -82,35 +82,14 @@ public class TripController {
         travelRepository.save(trip);
     }
 
-//    @PostMapping("/user/createTravel")
-//    public ResponseEntity<?> createTripV2(Authentication authentication, @RequestBody RequestTravelCreateDto requestTravelCreateDto) {
-//        String email = authentication.getName();
-//        Optional<User> byEmail = userRepository.findByEmail(email);
-//        if (byEmail.isPresent()) {
-//            User user = byEmail.get();
-//            Travel trip = new Travel();
-//            trip.setTitle("나의 여행" + trip.getId());
-//            LocalDate startDate = LocalDate.parse(requestTravelCreateDto.getStartDate());
-//            LocalDate endDate =LocalDate.parse(requestTravelCreateDto.getEndDate());
-//            trip.setStartDate(startDate);
-//            trip.setEndDate(endDate);
-//            trip.setUser(user);
-//            List<NationCode> nationCodeList = new ArrayList<>();
-//            for (String nation : requestTravelCreateDto.getNations()) {
-//                NationCode nationCode = nationCodeRepository.findByNation(nation).get();
-//                nationCodeList.add(nationCode);
-//            }
-//
-//            trip.setNationCodes(nationCodeList);
-//            travelRepository.save(trip);
-//            return ResponseEntity.ok(trip);
-//
-//        } else {
-//            // 로그인이 필요한 경우에 대한 처리
-//            String message = "로그인이 필요합니다.";
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
-//        }
-//    }
+    @PostMapping("/tester")
+    public void test(Authentication authentication){
+        String email = authentication.getName();
+        System.out.println(email);
+        Optional<User> byEmail = userRepository.findByEmail(email);
+        User user = byEmail.get();
+        System.out.println(user.getName());
+    }
 @PostMapping("/user/createTravel")
 public ResponseEntity<?> createTravel(Authentication authentication, @RequestBody RequestTravelCreateDto requestTravelCreateDto) {
     String email = authentication.getName();
