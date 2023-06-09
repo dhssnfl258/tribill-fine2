@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EntityScan
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 public class TribillFineApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TribillFineApplication.class, args);
