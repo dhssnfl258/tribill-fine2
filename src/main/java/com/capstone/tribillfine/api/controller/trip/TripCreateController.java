@@ -89,7 +89,7 @@ public class TripCreateController {
         Travel travel = travelRepository.findById(tripId).get();
         log.info("amounts: {}", amounts.getAmount());
         travel.setAmount(amounts.getAmount());
-
+        //paresLong to get amount
         travelRepository.save(travel);
 
         return  ResponseEntity.ok(travel.getId());

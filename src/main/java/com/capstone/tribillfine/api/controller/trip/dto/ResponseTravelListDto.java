@@ -17,6 +17,4 @@ public class ResponseTravelListDto {
     private String startDate;
     private String endDate;
     private final List<String> nation = new ArrayList<>();
-
-    //시작일 종료일 x -> 국가로 변경
 }

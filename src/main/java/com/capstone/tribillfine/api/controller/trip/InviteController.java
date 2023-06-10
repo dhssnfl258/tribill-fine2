@@ -1,5 +1,6 @@
 package com.capstone.tribillfine.api.controller.trip;
 
+import com.capstone.tribillfine.api.controller.trip.dto.invite.InviteCodeDto;
 import com.capstone.tribillfine.domain.travel.Travel;
 import com.capstone.tribillfine.domain.travel.TravelRepository;
 import com.capstone.tribillfine.domain.user.User;
@@ -30,12 +31,14 @@ public class InviteController {
     }
 
     @PostMapping("/trip/{travelId}")
-    public ResponseEntity<String> generateInviteCode(@PathVariable Long travelId) {
+    public ResponseEntity<InviteCodeDto> generateInviteCode(@PathVariable Long travelId) {
         // travelNumber를 기반으로 초대 코드 생성
+        InviteCodeDto inviteCodeDto = new InviteCodeDto();
         String inviteCode = generateCode(travelId);
         // 초대 코드를 저장하고 응답
         saveInviteCode(travelId, inviteCode);
-        return ResponseEntity.ok(inviteCode);
+        inviteCodeDto.setInviteCode(inviteCode);
+        return ResponseEntity.ok(inviteCodeDto);
     }
 
     private String generateCode(Long travelNumber) {
