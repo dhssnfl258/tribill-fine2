@@ -1,6 +1,7 @@
 package com.capstone.tribillfine.api.controller.report;
 
 
+import com.capstone.tribillfine.api.controller.report.dto.NationsDto;
 import com.capstone.tribillfine.domain.currency.NationCode;
 import com.capstone.tribillfine.domain.travel.Travel;
 import com.capstone.tribillfine.domain.travel.TravelRepository;
@@ -28,7 +29,7 @@ public class TravelReportController {
     }
 
     @GetMapping("/api/report")
-    public ResponseEntity<ArrayList<String>> report(Authentication authentication) {
+    public ResponseEntity<NationsDto> report(Authentication authentication) {
         String email = authentication.getName();
         log.info("email: {}", email);
         ArrayList<String> nations = new ArrayList<>();
@@ -40,7 +41,9 @@ public class TravelReportController {
                 nations.add(nationCode.getNation());
             }
         }
+        NationsDto nationsDto = new NationsDto();
+        nationsDto.setNations(nations);
 
-        return  ResponseEntity.ok(nations);
+        return  ResponseEntity.ok(nationsDto);
     }
 }
