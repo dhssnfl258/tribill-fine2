@@ -29,7 +29,7 @@ public class InviteController {
         travelRepository.save(travel);
         return ResponseEntity.ok().build();
     }
-
+///{inviteCode}/user
     @PostMapping("/trip/{travelId}")
     public ResponseEntity<InviteCodeDto> generateInviteCode(@PathVariable Long travelId) {
         // travelNumber를 기반으로 초대 코드 생성

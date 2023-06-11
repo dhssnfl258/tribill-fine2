@@ -16,6 +16,7 @@ Currency findByNationAndDate(@Param("nation") String nation, @Param("date") Loca
 
 Optional<Currency> findTopByNationOrderByDateDesc(String nation);
 //Optional<Currency> findTopByCodeOrderByDateDesc(String code);
+List<Currency> findTop7ByNationOrderByDateDesc(String nation);
 
     @Query("SELECT c FROM Currency c WHERE c.date = :date")
     List<Currency> findCurrenyByDate(@Param("date") LocalDate date);
