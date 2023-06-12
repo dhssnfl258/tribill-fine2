@@ -5,10 +5,12 @@ import com.capstone.tribillfine.domain.travel.Travel;
 import com.capstone.tribillfine.domain.travel.TravelRepository;
 import com.capstone.tribillfine.domain.user.User;
 import com.capstone.tribillfine.domain.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("api/invite")
 public class InviteController {
@@ -22,6 +24,7 @@ public class InviteController {
 
     @PostMapping("/{inviteCode}/user")
     public ResponseEntity<?> invite(@PathVariable String inviteCode, @RequestParam String Name){
+        log.info("inviteCode: {}", inviteCode);
         // 초대 코드를 기반으로 여행을 찾는다.
         Travel travel = travelRepository.findByInviteCode(inviteCode).get();
         User user = userRepository.findByName(Name).get();
