@@ -9,10 +9,7 @@ import com.capstone.tribillfine.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,12 +24,16 @@ public class CurrencyVisibleController {
     private final PushAlarmRepository pushAlarmRepository;
     private final UserRepository userRepository;
 
+    private final PushNotificationRepository pushNotificationRepository;
+
     public CurrencyVisibleController(CurrencyRepository currencyRepository, NationCodeRepository nationCodeRepository,
-                                     PushAlarmRepository pushAlarmRepository, UserRepository userRepository) {
+                                     PushAlarmRepository pushAlarmRepository, UserRepository userRepository,
+                                     PushNotificationRepository pushNotificationRepository) {
         this.currencyRepository = currencyRepository;
         this.nationCodeRepository = nationCodeRepository;
         this.pushAlarmRepository = pushAlarmRepository;
         this.userRepository = userRepository;
+        this.pushNotificationRepository = pushNotificationRepository;
     }
 
 
@@ -67,19 +68,25 @@ public class CurrencyVisibleController {
         return ResponseEntity.ok(responseCurrencyDto);
     }
 
-    //사용자가 NationCode 와 환율을 보내주면 이를 PusAlarm에 저장한다.
     @PostMapping("/api/currency/v1/push/currency")
-    public ResponseEntity<?> pushCurrency(Authentication authentication, @RequestParam String Nation, @RequestParam Double rate){
+    public ResponseEntity<?> pushCurrency(
+                                          @RequestBody PushNotification pushNotification){
+        //Authentication authentication
 
-        String email = authentication.getName();
-        log.info("email: {}", email);
-        User user = userRepository.findByEmail(email).get();
+//        String email = authentication.getName();
+//        log.info("email: {}", email);
+//        User user = userRepository.findByEmail(email).get();
+        PushNotification pushNotification1 = pushNotification;
+            log.info("pushNotification1: {}", pushNotification1.getPushToken());
+            log.info("pushNotification1: {}", pushNotification1.getNationCode());
+            log.info("pushNotification1: {}", pushNotification1.getRate());
 
-        PushAlarm pushAlarm = new PushAlarm();
-        pushAlarm.setNationCode(Nation);
-        pushAlarm.setRate(rate);
-        pushAlarm.setUserId(user.getId());
-        pushAlarmRepository.save(pushAlarm);
+            pushNotificationRepository.save(pushNotification1);
+//        PushAlarm pushAlarm = new PushAlarm();
+//        pushAlarm.setNationCode(Nation);
+//        pushAlarm.setRate(rate);
+//        pushAlarm.setUserId(user.getId());
+//        pushAlarmRepository.save(pushAlarm);
         return ResponseEntity.ok().build();
     }
 

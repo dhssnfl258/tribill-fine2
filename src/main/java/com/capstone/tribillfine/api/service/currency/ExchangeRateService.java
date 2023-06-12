@@ -49,14 +49,16 @@ public class ExchangeRateService {
     /**
      * 9시부터 6시간마다 DB 조회하여 환율이 업데이트 되지 않았다면 환율 api 호출
      */
+//    @Scheduled(cron = "0 0 9/6 * * *")
+//            @Scheduled(fixedRate = 30000) //test scheduler
     @Scheduled(cron = "0 0 9/6 * * *")
     public void fetchExchangeRateDataScheulded() {
 
         LocalDate now = LocalDate.now();
-
+                System.out.println(now);
         //오늘 날짜로 환율 데이터가 있는지 확인한다.
         List<Currency> nowCurrency = currencyRepository.findCurrenyByDate(now);
-        System.out.println("nowCurreny : " + nowCurrency);
+//        System.out.println("nowCurreny : " + nowCurrency);
         //환율 데이터가 없다면 API 호출해서 저장한다.
         if (nowCurrency.isEmpty()) {
             //Exchange Rate api url
