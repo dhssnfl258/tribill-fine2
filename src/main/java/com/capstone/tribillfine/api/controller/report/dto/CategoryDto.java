@@ -4,18 +4,6 @@ import lombok.Data;
 
 @Data
 public class CategoryDto {
-    private Double food;
-    private Double accommodation;
-    private Double flight;
-
-    private Double transportation;
-
-    private Double sightseeing;
-
-    private Double shopping;
-    private Double others;
-    private Double total;
-
     /**
      *     숙소("Accommodation"),
      *     항공("Flight"),
@@ -25,8 +13,19 @@ public class CategoryDto {
      *     쇼핑("Shopping"),
      *     기타("Others");
      */
+    private Double food = 0D;
+    private Double accommodation = 0D;
+    private Double flight = 0D;
+
+    private Double transportation = 0D;
+
+    private Double sightseeing = 0D;
+
+    private Double shopping = 0D;
+    private Double others = 0D;
+    private Double total = 0D;
 
     //나머지
-    private Double rest;
+    private Double rest = 0D;
 
 }
