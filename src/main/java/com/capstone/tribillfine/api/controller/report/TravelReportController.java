@@ -2,6 +2,7 @@ package com.capstone.tribillfine.api.controller.report;
 
 
 import com.amazonaws.Response;
+import com.capstone.tribillfine.api.controller.report.dto.CategoryBudgetDto;
 import com.capstone.tribillfine.api.controller.report.dto.CategoryDto;
 import com.capstone.tribillfine.api.controller.report.dto.NationsDto;
 import com.capstone.tribillfine.api.controller.report.dto.ShowTravelDto;
@@ -114,4 +115,26 @@ for (Budget budget : allByTravel) {
         }
         return ResponseEntity.ok(categoryDto);
     }
+
+    @GetMapping("/api/report/travel/{travelId}/detail/category")
+    public ResponseEntity<?> DetailsShower2(@PathVariable Long travelId, @RequestParam String category){
+        Travel travel = travelRepository.findById(travelId).orElseThrow(NoSuchElementException::new);
+        List<Budget> allByTravel = budgetRepository.findAllByTravel(travel);
+        ArrayList<Budget> budgets = new ArrayList<>();
+        ArrayList<CategoryBudgetDto> categoryBudgetDtos = new ArrayList<>();
+        for (Budget budget : allByTravel) {
+            if(budget.getCategory().getValue().equals(category)){
+                CategoryBudgetDto categoryBudgetDto = new CategoryBudgetDto();
+                categoryBudgetDto.setTitle(budget.getTitle());
+                categoryBudgetDto.setKoreaMoney(budget.getKoreaMoney());
+                categoryBudgetDto.setNation(budget.getNation());
+                categoryBudgetDto.setAmount(budget.getNationMoney());
+                categoryBudgetDto.setRegisterDate(budget.getRegisterTime().toString());
+                categoryBudgetDtos.add(categoryBudgetDto);
+                budgets.add(budget);
+            }
+        }
+        return ResponseEntity.ok(categoryBudgetDtos);
+    }
+
 }

@@ -21,7 +21,7 @@ public class InviteController {
     }
 
     @PostMapping("/{inviteCode}/user")
-    public ResponseEntity<?> invite(@PathVariable String inviteCode, @RequestParam  String Name){
+    public ResponseEntity<?> invite(@PathVariable String inviteCode, @RequestParam String Name){
         // 초대 코드를 기반으로 여행을 찾는다.
         Travel travel = travelRepository.findByInviteCode(inviteCode).get();
         User user = userRepository.findByName(Name).get();
